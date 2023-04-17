@@ -1,12 +1,17 @@
 <?php
 
 namespace App\Services;
-use App\Models\Article;
+use App\Repository\ArticleRepository;
 use Validator;
 class ArticleService{
+    public ArticleRepository $articleRepository;
 
+        public function __construct(ArticleRepository $articleRepository)
+    {
+        $this->articleRepository=$articleRepository;
+    }
     public function get_artilcles(){
-        return Article::get();
+        return $this->articleRepository->get_articles();
     }
     public function add_article($request) {
     $validator = Validator::make($request->all(), [
@@ -16,7 +21,7 @@ class ArticleService{
     if($validator->fails()){
         return response()->json($validator->errors()->toJson(), 400);
     }
-    $article=Article::create($validator->validated());
+    $article=$this->articleRepository->add_article($validator);
     return $article;
 }
 
