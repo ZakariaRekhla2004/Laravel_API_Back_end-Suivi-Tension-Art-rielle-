@@ -4,13 +4,19 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-class User extends Authenticatable  implements JWTSubject
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+
+
+class User extends Authenticatable implements JWTSubject
 {
+    use SoftDeletes;
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +27,13 @@ class User extends Authenticatable  implements JWTSubject
         'name',
         'email',
         'password',
+        'role',
+        
     ];
+    public function dossiers()
+    {
+        return $this->hasMany(Dossier::class, 'medecin_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
