@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Activite;
+use App\Models\Dossier;
+
 use App\Repository\ActiviteRepository;
 use Validator;
 
@@ -24,7 +26,7 @@ class ActiviteService
             "id" => 'nullable|numeric',
             "Poids" => 'required|numeric',
             'Taille' => 'required|numeric',
-            'dateExam' => 'required|date',
+            'dateExam' => 'date',
         ]);
         // If validation fails, return errors
         if ($validator->fails()) {
@@ -32,14 +34,22 @@ class ActiviteService
         }
         $poids = $request->input('Poids');
         $taille = $request->input('Taille');
-        $imc = $poids / ($taille * $taille);
+        $imc = ($poids / ($taille * $taille))*10000 ;
         $activite = new Activite();
         // Assign values to attributes
-        $activite->id = $request->input('id');
+        $activite->patient_id = auth('api')->user()->getAuthIdentifier();
         $activite->Poids = $request->input('Poids');
         $activite->Taille = $request->input('Taille'); 
         $activite->Imc = $imc;
         $activite->dateExam = $request->input('dateExam');
+
+        $dossier = Dossier::where("patient_id",auth('api')->user()->getAuthIdentifier())->first();
+        print($dossier); 
+        $dossier->weight= $request->input('Poids');
+        $dossier->height= $request->input('Taille');
+       
+
+        $dossier->save();
 
         return $this->activiteRepository->add_activite($activite);
     }

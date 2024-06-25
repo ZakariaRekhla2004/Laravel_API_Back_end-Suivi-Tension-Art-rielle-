@@ -27,7 +27,6 @@ class TensionExamRepository implements TensionExamInterfaces
     {
         return Tension_Exam::where('_id', '=', $id)->first();
         // $tension_Exam = Tension_Exam::find($id ,'_id');
-        
     //     return response()->json(["Tension_Exam" => $tension_Exam], 200);
     }
 

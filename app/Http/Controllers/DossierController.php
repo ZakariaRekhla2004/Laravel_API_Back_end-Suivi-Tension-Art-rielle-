@@ -14,10 +14,23 @@ class DossierController extends Controller
         $this->dossierService = $dossierService;
         $this->middleware('jwt');
     }
+    public function createDossier(Request $request)
+    {
+        $dossier = $this->dossierService->create_dossier($request);
+        return response()->json(['message' => 'Dossier added successfully', "Dossier" => $dossier], 201);
+    }
+    
     public function addDossier(Request $request)
     {
         $dossier = $this->dossierService->add_dossier($request);
         return response()->json(['message' => 'Dossier added successfully', "Dossier" => $dossier], 201);
+    }
+
+    public function complete_Dossier(Request $request)
+    {
+        // $id=auth('api')->user()->getAuthIdentifier();
+        $dossier = $this->dossierService->complete_Dossier($request,$request->id);
+        return response()->json(['message' => 'Dossier completed successfully', "Dossier" => $dossier, "status" =>  201], 201);
     }
     public function getDossier()
     {
@@ -39,6 +52,12 @@ class DossierController extends Controller
         return response()->json(["result" => "dossier updated successfully", "dossier" => $tension_Exam], 200);
 
     }
+    public function AddMedicament(Request $request)
+    {
+        // $tension_Exam =$this->dossierService->AddMedicament($request);
+        return response()->json(["result" => "dossier updated successfully", $this->dossierService->AddMedicament($request)], 201);
+
+    }
     public function deleteDossier(Request $request)
     {
         if ($this->dossierService->delete_Dossier($request->id)) {
@@ -47,8 +66,14 @@ class DossierController extends Controller
             return response()->json(['message' => 'faild.'], 400);
         }
     }
+    public function deleteMedicament(Request $request)
+    {
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+            return $this->dossierService->DeleteMedicament($request);
+    }
     public function getDossier_Medicaments(Request $request)
     {
+        
         $medicationNames= $this->dossierService->getDossier_Medicaments($request->id);
         return response()->json(['medications' => $medicationNames], 200);
     }

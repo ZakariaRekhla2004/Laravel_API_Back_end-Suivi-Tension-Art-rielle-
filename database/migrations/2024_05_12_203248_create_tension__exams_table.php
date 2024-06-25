@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('Diastolique')->nullable();
             $table->date('date_Examen');
             $table->date('heure_Examen');
+            $table->string('Etat');
             $table->timestamps();
         });
     }

@@ -11,30 +11,26 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('activite', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            // $table->integer("id")->nullable();
-            $table->decimal('Poids')->nullable();
-            $table->decimal('Taille')->nullable();
-            $table->decimal('Imc')->nullable();
-            $table->date('date_Examen');
             $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('medecin_id')->nullable();
+            $table->time('heure');
+            $table->date('date');
+            $table->enum('status', ['Accept', 'Waiting' , 'Rejected','Deleted'])->default('Waiting');
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('medecin_id')->references('id')->on('users')->onDelete('set null'); 
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('activite');
-       
+        Schema::dropIfExists('Appointment');
     }
-    
 };

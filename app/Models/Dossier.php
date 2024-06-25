@@ -13,6 +13,8 @@ class Dossier extends Model
     protected $collection = 'dossier_medical';
     protected $fillable = [
         'patient_id',
+        'date_naissance',
+        'status',
         'medecin_id',
         'weight',
         'height',
@@ -20,12 +22,9 @@ class Dossier extends Model
         'city',
         'marital_status',
         'date_of_birth',
-        'Antecedent_Familiaux',
-        'Antecedent_Personelle',
         'family_history',
         'personal_history',
         'medications', // Add medications to fillable fields
-
     ];
         // protected $casts = [
         // 'family_history' => 'json',

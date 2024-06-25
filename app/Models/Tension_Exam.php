@@ -10,10 +10,14 @@ class Tension_Exam extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
+        'id',
         'Systolique',
         'Diastolique',
         'date_Examen',
-        'heure_Examen'
+        'heure_Examen','Etat'
     ];
+    public function patient()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
 }

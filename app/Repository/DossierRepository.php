@@ -12,12 +12,22 @@ class DossierRepository implements DossierMInterfaces
     {
         return Dossier::get();
     }
+    public function create_Dossier($request)
+    {
+        return Dossier::create([
+            'patient_id' => $request->patient_id,
+            'medecin_id' => $request->medecin_id,
+            'status' => 'In progress'
+        ]);
+    }
+
     public function add_Dossier($request)
     {
         return Dossier::create([
             'patient_id' => $request->patient_id,
             'weight' => $request->weight,
             'height' => $request->height,
+            'age' => $request->age,
             'gender' => $request->gender,
             'city' => $request->city,
             'marital_status' => $request->marital_status,
@@ -50,14 +60,14 @@ class DossierRepository implements DossierMInterfaces
         $medications = collect($dossier->medications);
         // Extract medication names from the collection
         // $medicationNames = $medications->pluck('Nom');
-        $medicationNames = $medications->pluck('Nom');
+        // $medicationNames = $medications->pluck('Nom');
         // $medicationNames= $dossier->family_history[0];
 
         // // Extract medication information from the dossier
         // $medications = $dossier->medications->pluck('Nom');;
 
         // Return only the medication information as JSON response
-        return $medicationNames ;
+        return $medications ;
     }
 }
 
